@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .container {
+        max-width: 960px;
+        margin: 40px auto;
+        padding: 0 24px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #1e293b; /* slate-800 */
+    }
+    .return-home {
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        color: #2563eb; /* blue-600 */
+        font-weight: 600;
+        margin-bottom: 24px;
+        transition: color 0.3s ease;
+        user-select: none;
+    }
+    .return-home:hover {
+        color: #db2777; /* pink-600 */
+    }
+    .return-home i {
+        margin-right: 8px;
+        font-size: 1.2rem;
+    }
+    h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2563eb; /* blue-700 */
+        margin-bottom: 24px;
+        user-select: none;
+    }
+    .recipe-list {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 0;
+        list-style: none;
+    }
+    @media(min-width: 640px) {
+        .recipe-list {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media(min-width: 768px) {
+        .recipe-list {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+    .recipe-container {
+        background-color: #fff;
+        border-radius: 16px;
+        box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        overflow: hidden;
+        cursor: pointer;
+        border: 1px solid #dbeafe; /* blue-100 */
+        transition: box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
+    .recipe-container:hover {
+        box-shadow: 0 20px 25px rgba(0,0,0,0.15);
+    }
+    .recipe-image-section img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+    }
+    .recipe-info {
+        padding: 20px;
+        flex-grow: 1;
+    }
+    .recipe-info p {
+        margin: 0 0 12px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #2563eb; /* blue-600 */
+        font-size: 0.95rem;
+    }
+    .recipe-info p strong {
+        color: #db2777; /* pink-600 */
+        font-weight: 600;
+        font-size: 1.1rem;
+        min-width: 90px;
+    }
+    .recipe-info p a {
+        color: #db2777; /* pink-600 */
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .recipe-info p a:hover {
+        text-decoration: underline;
+    }
+    .no-favorites {
+        color: #6b7280; /* gray-600 */
+        font-style: italic;
+        user-select: none;
+    }
+</style>
+
+<div class="container">
+    <a href="{{ url_for('profile') }}" class="return-home"><i class="fas fa-arrow-left"></i> Back to Profile</a>
+    <h2>Favorite Recipes</h2>
+
+    {% if recipes %}
+    <ul class="recipe-list">
+        {% for recipe in recipes %}
+            <li class="recipe-container">
+                <div class="recipe-image-section">
+                    <img src="{{ url_for('static', filename=recipe.image_path if recipe.image_path else 'uploads/default-recipe.png') }}" 
+                         alt="{{ recipe.title }} Image" />
+                </div>
+
+                <div class="recipe-info">
+                    <p><strong><i class="fas fa-utensils"></i> Title:</strong> <a href="{{ url_for('view_recipe', recipe_id=recipe.id) }}">{{ recipe.title }}</a></p>
+                    <p><strong><i class="fas fa-tags"></i> Category:</strong> {{ recipe.category }}</p>
+                    <p><strong><i class="fas fa-drumstick-bite"></i> Food Type:</strong> {{ recipe.food_type }}</p>
+                    <p><strong><i class="fas fa-globe-americas"></i> Cuisine:</strong> {{ recipe.cuisine or 'Not specified' }}</p>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p class="no-favorites">No favorite recipes yet. Start exploring and add some!</p>
+    {% endif %}
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+{% endblock %}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Report Recipe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background-color: #f8f9fa;
+        }
+        h1 {
+            color: #d6336c;
+        }
+        form {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            max-width: 400px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+        select, textarea {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+            resize: vertical;
+        }
+        button {
+            background-color: #d6336c;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        button:hover {
+            background-color: #b02a5a;
+        }
+    </style>
+</head>
+<body>
+    <h1>Report Recipe</h1>
+    <form method="POST" action="{{ url_for('report_recipe', recipe_id=recipe_id) }}">
+        <label for="reason">Select a reason for reporting:</label>
+        <select id="reason" name="reason" required>
+            <option value="" disabled selected>Select reason</option>
+            <option value="Inappropriate content">Inappropriate content</option>
+            <option value="Spam or misleading">Spam or misleading</option>
+            <option value="Copyright infringement">Copyright infringement</option>
+            <option value="Other">Other</option>
+        </select>
+        <button type="submit">Submit Report</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sign Up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom gradient background animation */
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        body {
+            animation: gradientBG 15s ease infinite;
+            background: linear-gradient(270deg, #7f00ff, #e100ff, #ff0080);
+            background-size: 600% 600%;
+        }
+        /* Smooth fade-in animation for form */
+        .fade-in {
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center font-nunito bg-gradient-to-r from-purple-700 via-pink-600 to-red-600 bg-[length:600%_600%]">
+
+    <div class="fade-in bg-white bg-opacity-90 backdrop-blur-md rounded-3xl shadow-2xl p-10 max-w-md w-full mx-4">
+        <div class="flex justify-center mb-6">
+            <div class="bg-pink-600 rounded-full p-4 shadow-lg">
+                <i class="fas fa-utensils text-white text-3xl"></i>
+            </div>
+        </div>
+        <h1 class="text-4xl font-extrabold text-gray-900 mb-8 text-center">Create Account</h1>
+        <form method="POST" action="{{ url_for('signup') }}" autocomplete="off" class="space-y-6" novalidate>
+            <div class="relative">
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    value="{{ username }}"
+                    placeholder="Username"
+                    required
+                    aria-label="Username"
+                    class="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition duration-300 ease-in-out text-gray-900 placeholder-gray-400"
+                />
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-pink-500">
+                    <i class="fas fa-user"></i>
+                </span>
+            </div>
+            <div class="relative">
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value="{{ email }}"
+                    placeholder="Email"
+                    required
+                    autocomplete="off"
+                    aria-label="Email"
+                    class="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition duration-300 ease-in-out text-gray-900 placeholder-gray-400"
+                />
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-pink-500">
+                    <i class="fas fa-envelope"></i>
+                </span>
+            </div>
+            <div class="relative">
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Create a password"
+                    required
+                    autocomplete="off"
+                    aria-label="Password"
+                    class="w-full pl-12 pr-12 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition duration-300 ease-in-out text-gray-900 placeholder-gray-400"
+                />
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-pink-500">
+                    <i class="fas fa-lock"></i>
+                </span>
+                <button type="button" aria-label="Toggle password visibility" id="togglePassword" class="absolute right-4 top-1/2 -translate-y-1/2 text-pink-500 hover:text-pink-700 transition duration-300 ease-in-out focus:outline-none">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </div>
+            <button
+                type="submit"
+                class="w-full py-3 bg-gradient-to-r from-pink-600 to-red-600 text-white font-semibold rounded-lg shadow-lg hover:from-pink-700 hover:to-red-700 transition duration-300 ease-in-out"
+            >
+                Sign Up
+            </button>
+        </form>
+        <p class="mt-8 text-center text-gray-700">
+            Already have an account?
+            <a href="{{ url_for('login') }}" class="text-pink-600 hover:text-pink-800 font-semibold transition duration-300 ease-in-out">Log In here</a>
+        </p>
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                <ul class="mt-6 space-y-2 text-sm">
+                {% for category, message in messages %}
+                    {% if category != "danger" or message != "Please log in to access this page" %}
+                        <li class="px-4 py-2 rounded {{ 'bg-red-100 text-red-700' if category == 'danger' else 'bg-green-100 text-green-700' }}">
+                            {{ message }}
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Toggle password visibility
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            togglePassword.addEventListener('click', function () {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.querySelector('i').classList.toggle('fa-eye');
+                this.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+        });
+    </script>
+</body>
+</html>

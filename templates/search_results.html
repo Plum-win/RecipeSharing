@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Search Results</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+        /* Reset and base */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background: #fffafc;
+            color: #222;
+            line-height: 1.6;
+            padding: 2rem 1rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #d6336c; /* pink */
+            margin-bottom: 2rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        ul.results-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        li.result-item {
+            display: flex;
+            background: #f0f8ff; /* very light blue */
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(214, 51, 108, 0.15);
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        li.result-item:hover {
+            box-shadow: 0 6px 18px rgba(214, 51, 108, 0.3);
+        }
+        .image-wrapper {
+            flex-shrink: 0;
+            width: 96px;
+            height: 96px;
+            overflow: hidden;
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+        }
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        li.result-item:hover .image-wrapper img {
+            transform: scale(1.1);
+        }
+        .details {
+            padding: 1rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: #222;
+            flex-grow: 1;
+        }
+        .details p.title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0 0 0.4rem 0;
+            color: #d6336c;
+            text-transform: capitalize;
+        }
+        .details p.author {
+            font-size: 0.9rem;
+            margin: 0 0 0.8rem 0;
+            color: #3b82f6; /* blue */
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .details p.author i {
+            color: #d6336c;
+        }
+        .details a.view-link {
+            align-self: flex-start;
+            font-weight: 600;
+            color: #3b82f6;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .details a.view-link:hover {
+            color: #1e40af;
+            text-decoration: underline;
+        }
+        .details a.view-link i {
+            color: #d6336c;
+        }
+        /* No results message */
+        .no-results {
+            font-size: 1.2rem;
+            color: #d6336c;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        /* Back link */
+        .back-link {
+            margin-top: 3rem;
+            font-weight: 600;
+            color: #3b82f6;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+            align-self: center;
+        }
+        .back-link:hover {
+            color: #1e40af;
+            text-decoration: underline;
+        }
+        /* Responsive */
+        @media (max-width: 600px) {
+            li.result-item {
+                flex-direction: column;
+                align-items: center;
+            }
+            .image-wrapper {
+                width: 100%;
+                height: 180px;
+                border-radius: 12px 12px 0 0;
+            }
+            .details {
+                padding: 1rem;
+                align-items: center;
+                text-align: center;
+            }
+            .details a.view-link {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Search Results for "{{ query }}"</h1>
+
+    {% if results %}
+        <ul class="results-list">
+            {% for recipe in results %}
+                <li class="result-item" tabindex="0" aria-label="Recipe: {{ recipe.title }}">
+                    <div class="image-wrapper">
+                        <img
+                            src="{{ url_for('static', filename=recipe.image_path if recipe.image_path else 'uploads/default-recipe.png') }}"
+                            alt="Image of {{ recipe.title }}"
+                            loading="lazy"
+                        />
+                    </div>
+                    <div class="details">
+                        <p class="title">{{ recipe.title }}</p>
+                        <p class="author"><i class="fas fa-user"></i> {{ recipe.author }}</p>
+                        <a href="{{ url_for('public_view_recipe', recipe_id=recipe.id) }}" class="view-link" aria-label="View recipe {{ recipe.title }}">
+                            View Recipe <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="no-results">No Recipe Found for "{{ query }}"</p>
+    {% endif %}
+
+    <a href="{{ url_for('home') }}" class="back-link" aria-label="Back to home">
+        &larr; Back to Home
+    </a>
+</body>
+</html>

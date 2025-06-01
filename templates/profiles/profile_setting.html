@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Profile Settings</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: lightpink;
+            color: #1e293b; /* slate-800 */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            align-items: flex-start;
+            padding-top: 40px;
+        }
+        .container {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            padding: 32px 40px;
+            width: 100%;
+            max-width: 480px;
+        }
+        .return-home {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            color: #2563eb; /* blue-600 */
+            font-weight: 600;
+            margin-bottom: 24px;
+            transition: color 0.3s ease;
+        }
+        .return-home:hover {
+            color: #db2777; /* pink-600 */
+        }
+        .return-home i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+        h2 {
+            margin-top: 0;
+            margin-bottom: 24px;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2563eb; /* blue-700 */
+            user-select: none;
+        }
+        form label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #334155; /* slate-700 */
+        }
+        form input[type="text"],
+        form input[type="email"],
+        form input[type="password"],
+        form input[type="file"],
+        form textarea {
+            width: 100%;
+            padding: 10px 12px 10px 36px;
+            border: 1.5px solid #cbd5e1; /* slate-300 */
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #1e293b; /* slate-800 */
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+            background-repeat: no-repeat;
+            background-position: 10px center;
+            background-size: 18px 18px;
+        }
+        form input[type="text"]:focus,
+        form input[type="email"]:focus,
+        form input[type="password"]:focus,
+        form input[type="file"]:focus,
+        form textarea:focus {
+            outline: none;
+            border-color: #db2777; /* pink-600 */
+            box-shadow: 0 0 5px rgba(219, 39, 119, 0.5);
+            background-color: #fff;
+        }
+        form textarea {
+            resize: vertical;
+            padding-top: 12px;
+            padding-bottom: 12px;
+        }
+        /* Icons for inputs */
+        #username {
+            background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/svgs/solid/user.svg');
+        }
+        #email {
+            background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/svgs/solid/envelope.svg');
+        }
+        #password {
+            background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/svgs/solid/lock.svg');
+        }
+        #image {
+            background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/svgs/solid/image.svg');
+            padding-left: 36px;
+        }
+        #bio {
+            background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/svgs/solid/pen.svg');
+        }
+        #facebook {
+            background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/svgs/brands/facebook-f.svg');
+        }
+        #instagram {
+            background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/svgs/brands/instagram.svg');
+        }
+        button[type="submit"] {
+            background-color: #db2777; /* pink-600 */
+            color: white;
+            font-weight: 700;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease;
+            margin-top: 12px;
+            width: 100%;
+        }
+        button[type="submit"]:hover {
+            background-color: #be185d; /* pink-700 */
+        }
+        #image-preview {
+            width: 100px;
+            height: 100px;
+            display: none;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-top: 12px;
+            border: 2px solid #db2777;
+            box-shadow: 0 0 8px rgba(219, 39, 119, 0.6);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('profile') }}" class="return-home"><i class="fas fa-arrow-left"></i> Back to Profile</a>
+        <h2>Profile Settings</h2>
+        <form method="POST" action="{{ url_for('update_profile') }}" enctype="multipart/form-data" novalidate>
+            <label for="username">Username/Name:</label>
+            <input type="text" id="username" name="username" value="{{ user.username }}" required />
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ user.email }}" required />
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter new password" />
+
+            <label for="image">Profile Image:</label>
+            <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)" />
+
+            <img id="image-preview" alt="Image Preview" />
+
+            <label for="bio">Bio:</label>
+            <textarea id="bio" name="bio" rows="4">{{ user.bio or '' }}</textarea>
+
+            <label for="facebook">Facebook:</label>
+            <input type="text" id="facebook" name="facebook" placeholder="Facebook profile link" value="{{ user.facebook }}" />
+
+            <label for="instagram">Instagram:</label>
+            <input type="text" id="instagram" name="instagram" placeholder="Instagram profile link" value="{{ user.instagram }}" />
+
+            <button type="submit">Save</button>
+        </form>
+    </div>
+
+    <script>
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                const preview = document.getElementById("image-preview");
+                preview.src = reader.result;
+                preview.style.display = "block";
+            };
+            if(event.target.files[0]) {
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        }
+    </script>
+</body>
+</html>

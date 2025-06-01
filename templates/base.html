@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Recipe Sharing Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='uploads/styles.css') }}">
+</head>
+<body>
+
+{% if request.endpoint == 'home' %}
+<nav class="main-nav">
+  <h1 class="site-title">
+    <i class="fas fa-utensils site-icon"></i>
+    Recipe Sharing Platform
+  </h1>
+  <form action="{{ url_for('search') }}" method="get" class="search-form" role="search" aria-label="Search recipes">
+    <input
+      type="text"
+      name="query"
+      placeholder="Search recipes..."
+      required
+      class="search-input"
+    />
+    <button
+      type="submit"
+      class="search-button"
+      aria-label="Search recipes"
+    >
+      Search
+    </button>
+  </form>
+  <div class="profile-link">
+    <a href="{{ url_for('profile') }}" class="profile-anchor">
+      Profile{% if user.is_authenticated %} ({{ user.username }}){% endif %}
+    </a>
+  </div>
+</nav>
+
+<nav class="sub-nav">
+  <!-- Category Dropdown -->
+  <div class="dropdown" id="categoryDropdownWrapper">
+    <a href="#" id="categoryToggle" class="dropdown-toggle">Category</a>
+    <div id="categoryMenu" class="dropdown-menu hidden" role="menu" aria-label="Category options">
+      {% for category in categories %}
+      <a href="/filter?type=category&selection={{ category }}" class="dropdown-item">{{ category }}</a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Food Type Dropdown -->
+  <div class="dropdown" id="foodTypeDropdownWrapper">
+    <a href="#" id="foodTypeToggle" class="dropdown-toggle">Food Type</a>
+    <div id="foodTypeMenu" class="dropdown-menu hidden" role="menu" aria-label="Food type options">
+      {% for food_type in food_types %}
+      <a href="/filter?type=food_type&selection={{ food_type }}" class="dropdown-item">{{ food_type }}</a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Cuisines Dropdown -->
+  <div class="dropdown" id="cuisineDropdownWrapper">
+    <a href="#" id="cuisineToggle" class="dropdown-toggle">Cuisines</a>
+    <div id="cuisineMenu" class="dropdown-menu hidden" role="menu" aria-label="Cuisine options">
+      {% for cuisine in cuisines %}
+      <a href="/filter?type=cuisine&selection={{ cuisine }}" class="dropdown-item">{{ cuisine }}</a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- About Us Link -->
+  <a href="{{ url_for('about_us') }}" class="about-link">About Us</a>
+</nav>
+{% endif %}
+
+<main class="main-content">
+  {% block content %}{% endblock %}
+
+  {% if request.endpoint == 'home' %}
+    {% if recipes %}
+      {% if filter_type and selection %}
+        <p class="filter-info">
+          Showing recipes filtered by {{ filter_type|capitalize }}: <strong>{{ selection }}</strong>
+        </p>
+      {% endif %}
+
+      <section>
+        <h2 class="section-title">Recipes</h2>
+        <div class="recipe-grid">
+          {% for recipe in recipes %}
+          <div class="recipe-card">
+            <div class="recipe-image-section">
+              <img src="{{ url_for('static', filename=recipe.image_path if recipe.image_path else 'uploads/default-recipe.png') }}"
+                   alt="Recipe Image"
+                   class="recipe-image"
+                   loading="lazy" />
+            </div>
+            <div class="recipe-info">
+              <h3 class="recipe-title">
+                <a href="{{ url_for('public_view_recipe', recipe_id=recipe.id) }}" class="recipe-link">{{ recipe.title }}</a>
+              </h3>
+              <p class="recipe-category"><strong>Category:</strong> {{ recipe.category }}</p>
+              <p class="recipe-food-type"><strong>Food Type:</strong> {{ recipe.food_type }}</p>
+              <p class="recipe-cuisine"><strong>Cuisine:</strong> {{ recipe.cuisine or 'Not specified' }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+  {% endif %}
+</main>
+
+<footer class="site-footer">
+  <p>&copy; 2025 Recipe Sharing Platform</p>
+</footer>
+
+<!-- Dropdown Toggle Script -->
+<script>
+  function setupToggle(triggerId, menuId, wrapperId) {
+    const toggle = document.getElementById(triggerId);
+    const menu = document.getElementById(menuId);
+    const wrapper = document.getElementById(wrapperId);
+    let isOpen = false;
+
+    toggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      isOpen = !isOpen;
+      // Toggle 'active' class instead of 'hidden'
+      menu.classList.toggle('active', isOpen);
+      menu.classList.toggle('hidden', !isOpen);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!wrapper.contains(e.target)) {
+        menu.classList.remove('active');
+        menu.classList.add('hidden');
+        isOpen = false;
+      }
+    });
+  }
+
+  setupToggle('categoryToggle', 'categoryMenu', 'categoryDropdownWrapper');
+  setupToggle('foodTypeToggle', 'foodTypeMenu', 'foodTypeDropdownWrapper');
+  setupToggle('cuisineToggle', 'cuisineMenu', 'cuisineDropdownWrapper');
+</script>
+
+</body>
+</html>

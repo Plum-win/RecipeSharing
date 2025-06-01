@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 style="text-align: center; font-size: 28px; color: #333; margin-bottom: 10px;">Profile</h2>
+
+
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: pink;
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
+
+    .profile-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 30px;
+        background: #ffffff;
+        border: 2px solid paleturquoise;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        position: relative;
+    }
+
+    .profile-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .profile-actions a {
+        font-size: 16px;
+        font-weight: bold;
+        text-decoration: none;
+        color: #0078d4;
+    }
+
+    .profile-actions a.logout {
+        color: red;
+    }
+
+    .profile-content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+    }
+
+    .profile-info {
+    flex: 2;
+    min-width: 250px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+   
+}
+
+
+   .profile-info img {
+    display: block;
+    margin: 0 auto 15px auto; /* centers the image and adds bottom space */
+    border: 5px solid #fff;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+
+    .profile-info p {
+        font-size: 16px;
+        margin-bottom: 12px;
+        line-height: 1.6;
+    }
+
+   .profile-info ul {
+    list-style: none;
+    padding-left: 0;
+    text-align: left; /* keeps list readable */
+}
+
+
+    .profile-info ul li {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .profile-info a {
+        color: #0078d4;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .profile-info a:hover {
+        text-decoration: underline;
+    }
+
+    .user-recipes {
+        margin-top: 40px;
+        padding: 20px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .user-recipes h3 {
+        font-size: 20px;
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .recipe-list {
+        list-style: none;
+        padding: 0;
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+
+    .recipe-container {
+        display: flex;
+        gap: 20px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background: #f9f9f9;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .recipe-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .recipe-image-section img {
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+
+    .recipe-info p {
+        margin: 8px 0;
+        font-size: 15px;
+        color: #444;
+    }
+
+    .recipe-info a {
+        color: #0078d4;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .recipe-info a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="profile-container">
+<a href="{{ url_for('home') }}" style="text-decoration: none; color: #0078d4; font-weight: bold; display: block; text-align: left; margin-bottom: 20px;">
+    ⬅ Back to Home
+</a>
+    <div class="profile-actions">
+        <a href="{{ url_for('update_profile') }}">Profile Settings</a>
+        <a href="{{ url_for('favorites') }}">Favorites</a>
+        <a href="{{ url_for('own_recipes') }}">Own Recipes</a>
+        <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+    </div>
+
+    <div class="profile-content">
+        <div class="profile-info">
+            <img src="{{ url_for('static', filename=user.image_path.replace('\\', '/')) if user.image_path else url_for('static', filename='uploads/profile.png') }}" 
+                    alt="Profile Picture"
+                    style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;">
+            
+            <p><strong>Name:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Bio:</strong> {{ user.bio or 'No bio provided.' }}</p>
+            
+            <p><strong>Social Media Accounts:</strong></p>
+            <ul>
+                {% if user.facebook %}
+                    <li>Facebook: <a href="{{ user.facebook }}">{{ user.facebook }}</a></li>
+                {% else %}
+                    <li>Facebook: N/A</li>
+                {% endif %}
+                {% if user.instagram %}
+                    <li>Instagram: <a href="{{ user.instagram }}">{{ user.instagram }}</a></li>
+                {% else %}
+                    <li>Instagram: N/A</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="user-recipes">
+    <h3>Your Recipes</h3>
+    {% if recipes %}
+    <ul class="recipe-list">
+        {% for recipe in recipes %}
+            <li class="recipe-container">
+                <div class="recipe-image-section">
+                    <img src="{{ url_for('static', filename=recipe.image_path if recipe.image_path else 'uploads/default-recipe.png') }}" 
+                         alt="{{ recipe.title }} Image" 
+                         style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px;">
+                </div>
+
+                <div class="recipe-info">
+                    <p><strong>Title:</strong> <a href="{{ url_for('view_recipe', recipe_id=recipe.id) }}">{{ recipe.title }}</a></p>
+                    <p><strong>Category:</strong> {{ recipe.category }}</p>
+                    <p><strong>Food Type:</strong> {{ recipe.food_type }}</p>
+                    <p><strong>Cuisine:</strong> {{ recipe.cuisine or 'Not specified' }}</p>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>No recipes found. Be the first to <a href="{{ url_for('own_recipes') }}">add your recipe!</a></p>
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ recipe.title }}</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+        /* Reset and base */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #ffe4e6;
+            color: #222;
+            line-height: 1.6;
+            padding: 1rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        header h1 {
+            font-size: 2.5rem;
+            color: #d6336c; /* pink */
+            margin: 0;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        main {
+            max-width: 700px;
+            width: 100%;
+            background: #f0f8ff; /* very light blue */
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(214, 51, 108, 0.2);
+        }
+        /* Image container */
+        .image-container {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .image-container img {
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(214, 51, 108, 0.3);
+            transition: transform 0.3s ease;
+        }
+        .image-container img:hover {
+            transform: scale(1.05);
+        }
+        /* Details list */
+        .details {
+            margin-bottom: 1.5rem;
+        }
+        .details p {
+            margin: 0.4rem 0;
+            font-size: 1rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+        .details p strong {
+            width: 110px;
+            color: #d6336c;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-right: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+        }
+        .details p strong i {
+            margin-right: 0.4rem;
+            color: #3b82f6; /* blue */
+        }
+        /* Ingredients and instructions */
+        .ingredients, .instructions {
+            background: #fff;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.15);
+            margin-bottom: 1.5rem;
+            white-space: pre-wrap;
+            font-size: 1rem;
+            color: #444;
+        }
+        /* Rating section */
+        .rating-section {
+            margin-bottom: 1.5rem;
+            border-top: 2px solid #d6336c;
+            padding-top: 1rem;
+        }
+        .rating-section h3 {
+            color: #d6336c;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+        .rating-section h3 i {
+            margin-left: 0.5rem;
+            color: #3b82f6;
+        }
+        /* Form styles */
+        form {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            font-weight: 600;
+            color: #3b82f6;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        select {
+            padding: 0.4rem 0.6rem;
+            border-radius: 6px;
+            border: 1.5px solid #d6336c;
+            font-size: 1rem;
+            color: #222;
+            outline: none;
+            transition: border-color 0.3s ease;
+            width: 100%;
+            max-width: 150px;
+            cursor: pointer;
+        }
+        select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 5px #3b82f6aa;
+        }
+        button.btn {
+            background-color: #d6336c;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 0.5rem;
+        }
+        button.btn:hover {
+            background-color: #b02a5a;
+        }
+        /* Favorites checkbox */
+        .favorites-form {
+            font-weight: 600;
+            color: #3b82f6;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+        }
+        .favorites-form input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #d6336c;
+            border-radius: 4px;
+        }
+        /* Back link */
+        .back-link {
+            display: inline-block;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+            margin-top: 1rem;
+        }
+        .back-link:hover {
+            color: #1e40af;
+            text-decoration: underline;
+        }
+        /* Responsive */
+        @media (max-width: 480px) {
+            main {
+                padding: 1rem;
+            }
+            header h1 {
+                font-size: 1.8rem;
+            }
+            .details p strong {
+                width: 90px;
+                font-size: 0.9rem;
+            }
+            .ingredients, .instructions {
+                font-size: 0.9rem;
+            }
+            select {
+                max-width: 100%;
+            }
+            button.btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>{{ recipe.title }}</h1>
+    </header>
+
+    <main>
+        <!-- Recipe Image -->
+        <div class="image-container">
+            <img src="{{ url_for('static', filename=recipe.image_path if recipe.image_path else 'uploads/default-recipe.png') }}"
+                 alt="{{ recipe.title }} Image" />
+        </div>
+
+        <!-- Recipe Details -->
+        <div class="details">
+            <p><strong><i class="fas fa-user"></i> Author:</strong> {{ recipe.author if recipe.author else 'Unknown' }}</p>
+            <p><strong><i class="fas fa-star"></i> Rating:</strong> {{ recipe.rating or 'No rating yet' }}</p>
+            <p><strong><i class="fas fa-tags"></i> Category:</strong> {{ recipe.category }}</p>
+            <p><strong><i class="fas fa-utensils"></i> Food Type:</strong> {{ recipe.food_type }}</p>
+            <p><strong><i class="fas fa-globe"></i> Cuisine:</strong> {{ recipe.cuisine or 'Not specified' }}</p>
+        </div>
+
+        <p><strong>Ingredients:</strong></p>
+        <div class="ingredients">{{ recipe.ingredients }}</div>
+
+        <p><strong>Instructions:</strong></p>
+        <div class="instructions">{{ recipe.instructions }}</div>
+
+        <p><strong>Total Time:</strong> {{ recipe.total_time or 'Not specified' }}</p>
+
+        <!-- Rating Section -->
+        <section class="rating-section">
+            <h3>Rating: {{ recipe.rating or 'Not yet rated' }} <i class="fas fa-star"></i></h3>
+
+            <form action="{{ url_for('rate_recipe', recipe_id=recipe.id) }}" method="POST">
+                <label for="rating">Rate this Recipe:</label>
+                <select id="rating" name="rating" required>
+                    <option value="1">1 Star</option>
+                    <option value="2">2 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option value="5">5 Stars</option>
+                </select>
+                <button type="submit" class="btn">Submit Rating</button>
+            </form>
+        </section>
+
+        <!-- Favorites Checkbox -->
+        <form class="favorites-form" style="margin-top: 1rem;">
+            <input type="hidden" name="recipe_id" id="recipe_id" value="{{ recipe.id }}" />
+            <label for="favorite-checkbox">
+                <input type="checkbox" name="favorite" id="favorite-checkbox"
+                       {% if recipe.id in favorite_recipe_ids %}checked{% endif %} />
+                Add to Favorites
+            </label>
+        </form>
+
+        <!-- Back Button -->
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; align-items: flex-start;">
+            <a href="{{ url_for('report_recipe', recipe_id=recipe.id) }}" class="back-link" style="align-self: flex-start;">Report this Recipe</a>
+            <a href="{{ url_for('home') }}" class="back-link" style="align-self: flex-start;">⬅ Back to Home</a>
+        </div>
+    </main>
+
+    <!-- JavaScript for Auto-Saving Favorites -->
+    <script>
+        const checkbox = document.getElementById('favorite-checkbox');
+        const recipeId = document.getElementById('recipe_id').value;
+
+        checkbox.addEventListener('change', () => {
+            const isFavorited = checkbox.checked;
+
+            fetch('/add_favorite', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    recipe_id: recipeId,
+                    favorite: isFavorited ? 'on' : null
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Favorite status updated successfully.');
+                } else {
+                    console.error('Failed to update favorite status.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

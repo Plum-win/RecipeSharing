@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Edit Recipe</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9fafb;
+            color: #1e293b; /* slate-800 */
+            margin: 0;
+            padding: 40px 24px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            align-items: flex-start;
+        }
+        .container {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            padding: 32px 40px;
+            width: 100%;
+            max-width: 480px;
+        }
+        .return-home {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            color: #2563eb; /* blue-600 */
+            font-weight: 600;
+            margin-bottom: 24px;
+            transition: color 0.3s ease;
+            user-select: none;
+        }
+        .return-home:hover {
+            color: #db2777; /* pink-600 */
+        }
+        .return-home i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+        h1 {
+            margin-top: 0;
+            margin-bottom: 24px;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2563eb; /* blue-700 */
+            user-select: none;
+        }
+        form label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #334155; /* slate-700 */
+        }
+        form input[type="text"],
+        form select,
+        form textarea,
+        form input[type="file"] {
+            width: 100%;
+            padding: 10px 12px 10px 36px;
+            border: 1.5px solid #cbd5e1; /* slate-300 */
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #1e293b; /* slate-800 */
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+            background-repeat: no-repeat;
+            background-position: 10px center;
+            background-size: 18px 18px;
+            margin-bottom: 16px;
+        }
+        form input[type="text"]:focus,
+        form select:focus,
+        form textarea:focus,
+        form input[type="file"]:focus {
+            outline: none;
+            border-color: #db2777; /* pink-600 */
+            box-shadow: 0 0 5px rgba(219, 39, 119, 0.5);
+            background-color: #fff;
+        }
+        form textarea {
+            resize: vertical;
+            padding-top: 12px;
+            padding-bottom: 12px;
+        }
+        /* Icons for inputs */
+        #title {
+            background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/svgs/solid/utensils.svg');
+        }
+        #category {
+            background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/svgs/solid/tags.svg');
+        }
+        #food-type {
+            background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/svgs/solid/drumstick-bite.svg');
+        }
+        #ingredients {
+            background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/svgs/solid/leaf.svg');
+        }
+        #instructions {
+            background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/svgs/solid/pen.svg');
+        }
+        #image_path {
+            background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/svgs/solid/image.svg');
+        }
+        #image {
+            background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/svgs/solid/upload.svg');
+        }
+        button[type="submit"] {
+            background-color: #db2777; /* pink-600 */
+            color: white;
+            font-weight: 700;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease;
+            margin-top: 12px;
+            width: 100%;
+            user-select: none;
+        }
+        button[type="submit"]:hover {
+            background-color: #be185d; /* pink-700 */
+        }
+        a.cancel-btn {
+            display: inline-block;
+            margin-top: 12px;
+            color: #2563eb; /* blue-600 */
+            font-weight: 600;
+            text-decoration: none;
+            user-select: none;
+            transition: color 0.3s ease;
+        }
+        a.cancel-btn:hover {
+            color: #db2777; /* pink-600 */
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('own_recipes') }}" class="return-home"><i class="fas fa-arrow-left"></i> Back to My Recipes</a>
+        <h1>Edit Recipe</h1>
+        <form action="" method="post" enctype="multipart/form-data" novalidate>
+            <label for="title">Title:</label>
+            <input type="text" name="title" id="title" value="{{ recipe.title }}" required />
+
+            <label for="category">Category:</label>
+            <select name="category" id="category" required>
+                {% for category in categories %}
+                <option value="{{ category }}" {% if recipe.category == category %}selected{% endif %}>{{ category }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="food-type">Food Type:</label>
+            <select name="food_type" id="food-type" required>
+                {% for food_type in food_types %}
+                <option value="{{ food_type }}" {% if recipe.food_type == food_type %}selected{% endif %}>{{ food_type }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="ingredients">Ingredients:</label>
+            <textarea name="ingredients" id="ingredients" required>{{ recipe.ingredients }}</textarea>
+
+            <label for="instructions">Instructions:</label>
+            <textarea name="instructions" id="instructions" required>{{ recipe.instructions }}</textarea>
+
+            <label for="image_path">Current Image Path:</label>
+            <input type="text" name="image_path" id="image_path" value="{{ recipe.image_path }}" readonly />
+
+            <label for="image">Upload New Image:</label>
+            <input type="file" name="image" id="image" />
+
+            <button type="submit">Save Changes</button>
+            <a href="{{ url_for('own_recipes') }}" class="cancel-btn">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

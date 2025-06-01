@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            background-color: #f3f4f6; /* bg-gray-100 */
+            color: #1f2937; /* text-gray-800 */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            padding: 1.5rem; /* p-6 */
+            margin: 0;
+        }
+        h1 {
+            font-size: 2.25rem; /* text-4xl */
+            font-weight: 700; /* font-bold */
+            text-align: center;
+            color: #1a399e; /* text-blue-900 */
+            margin-bottom: 2rem; /* mb-8 */
+        }
+        nav {
+            background-color: #1e40af; /* bg-blue-800 */
+            border-radius: 0.375rem; /* rounded-md */
+            margin-bottom: 2.5rem; /* mb-10 */
+        }
+        nav ul {
+            display: flex;
+            justify-content: center;
+            gap: 2rem; /* space-x-8 */
+            padding: 1rem; /* p-4 */
+            margin: 0;
+            list-style: none;
+        }
+        nav ul li a {
+            color: white; /* text-white */
+            font-weight: 600; /* font-semibold */
+            padding: 0.5rem 1rem; /* px-4 py-2 */
+            border-radius: 0.375rem; /* rounded */
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+        }
+        nav ul li a:hover {
+            background-color: #1d4ed8; /* hover:bg-blue-700 */
+        }
+        h2 {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 600; /* font-semibold */
+            color: #1e40af; /* text-blue-800 */
+            border-bottom: 0.25rem solid #2563eb; /* border-b-4 border-blue-600 */
+            padding-bottom: 0.5rem; /* pb-2 */
+            margin-bottom: 1.5rem; /* mb-6 */
+            max-width: 24rem; /* max-w-md */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2.5rem; /* mb-10 */
+            gap: 1rem; /* space-x-4 */
+        }
+        form input[type="text"] {
+            width: 18rem; /* w-72 */
+            padding: 0.5rem 1rem; /* px-4 py-2 */
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            border-radius: 0.375rem; /* rounded */
+            outline: none;
+            transition: box-shadow 0.3s ease;
+        }
+        form input[type="text"]:focus {
+            box-shadow: 0 0 0 2px #2563eb; /* focus:ring-2 focus:ring-blue-600 */
+            border-color: #2563eb;
+        }
+        form button {
+            background-color: #2563eb; /* bg-blue-600 */
+            color: white; /* text-white */
+            font-weight: 600; /* font-semibold */
+            padding: 0.5rem 1.5rem; /* px-6 py-2 */
+            border-radius: 0.375rem; /* rounded */
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        form button:hover {
+            background-color: #1d4ed8; /* hover:bg-blue-700 */
+        }
+        .container {
+            max-width: 72rem; /* max-w-6xl */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 1.5rem; /* gap-6 */
+        }
+        @media (min-width: 640px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr); /* sm:grid-cols-2 */
+            }
+        }
+        @media (min-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(3, 1fr); /* md:grid-cols-3 */
+            }
+        }
+        @media (min-width: 1024px) {
+            .grid {
+                grid-template-columns: repeat(4, 1fr); /* lg:grid-cols-4 */
+            }
+        }
+        .card {
+            background-color: white; /* bg-white */
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* shadow-md */
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+        .card:hover {
+            box-shadow: 0 10px 15px rgba(0,0,0,0.2); /* hover:shadow-xl */
+        }
+        .card img {
+            width: 100%;
+            height: 12rem; /* h-48 */
+            object-fit: cover; /* object-cover */
+            display: block;
+        }
+        .card-content {
+            padding: 1rem; /* p-4 */
+        }
+        .card-content h3 {
+            color: #ec4899; /* text-pink-500 */
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 600; /* font-semibold */
+            margin-bottom: 0.5rem; /* mb-2 */
+        }
+        .card-content h3 a {
+            text-decoration: none;
+            color: inherit;
+            transition: text-decoration 0.3s ease;
+        }
+        .card-content h3 a:hover {
+            text-decoration: underline; /* hover:underline */
+        }
+        .card-content p {
+            color: #374151; /* text-gray-700 */
+            font-size: 0.875rem; /* text-sm */
+            margin: 0.25rem 0;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .text-gray-500 {
+            color: #6b7280;
+        }
+        footer {
+            background-color: #f3f4f6; /* bg-gray-100 */
+            text-align: center;
+            color: #4b5563; /* text-gray-600 */
+            padding: 1rem 0; /* py-4 */
+            margin-top: 3rem; /* mt-12 */
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    <nav>
+        <ul>
+            <li><a href="/admin/dashboard">Dashboard</a></li>
+            <li><a href="/admin/menu_settings">Menu Settings</a></li>
+            <li><a href="/admin/manage_users">Manage User Accounts</a></li>
+            <li><a href="{{ url_for('admin_reports') }}">Reports</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+    <h2>Recipes</h2>
+    <form method="post" action="{{ url_for('admin_dashboard') }}">
+        <input type="text" name="search_query" placeholder="Search recipes" value="{{ search_query or '' }}">
+        <button type="submit">Search</button>
+    </form>
+    <div class="container">
+        {% if recipes %}
+            <div class="grid">
+                {% for recipe in recipes %}
+                    <div class="card">
+                        <div>
+                            <img src="{{ url_for('static', filename=recipe.image_path if recipe.image_path else 'uploads/default-recipe.png') }}"
+                                 alt="Recipe Image"
+                                 loading="lazy" />
+                        </div>
+                        <div class="card-content">
+                            <h3>
+                                <a href="{{ url_for('view_recipe', recipe_id=recipe['id']) }}">
+                                    {{ recipe['title'] }}
+                                </a>
+                            </h3>
+                            <p><strong>Category:</strong> {{ recipe['category'] }}</p>
+                            <p><strong>Food Type:</strong> {{ recipe['food_type'] }}</p>
+                            <p><strong>Cuisine:</strong> {{ recipe['cuisine'] or 'Not specified' }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-center text-gray-500">No recipes found.</p>
+        {% endif %}
+    </div>
+    <footer>
+        <p>© 2025 Recipe Sharing Platform</p>
+    </footer>
+</body>
+</html>

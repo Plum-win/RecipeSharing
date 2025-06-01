@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Filtered Recipes</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffe4e6;
+            color: #1e293b; /* slate-800 */
+            margin: 0;
+            padding: 40px 24px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            flex-grow: 1;
+        }
+        .return-home {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            color: #2563eb; /* blue-600 */
+            font-weight: 600;
+            margin-bottom: 24px;
+            transition: color 0.3s ease;
+            user-select: none;
+        }
+        .return-home:hover {
+            color: #db2777; /* pink-600 */
+        }
+        .return-home i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2563eb; /* blue-700 */
+            margin-bottom: 16px;
+            user-select: none;
+        }
+        main p {
+            font-size: 1.1rem;
+            margin-bottom: 24px;
+            color: #334155; /* slate-700 */
+        }
+        main p strong {
+            color: #db2777; /* pink-600 */
+            font-weight: 700;
+        }
+        .recipe-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+            padding: 0;
+            list-style: none;
+        }
+        @media(min-width: 640px) {
+            .recipe-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media(min-width: 768px) {
+            .recipe-list {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        .recipe-container {
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            cursor: pointer;
+            border: 1px solid #dbeafe; /* blue-100 */
+            transition: box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .recipe-container:hover {
+            box-shadow: 0 20px 25px rgba(0,0,0,0.15);
+        }
+        .recipe-image-section img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+        }
+        .recipe-info {
+            padding: 20px;
+            flex-grow: 1;
+        }
+        .recipe-info p {
+            margin: 0 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #2563eb; /* blue-600 */
+            font-size: 1rem;
+        }
+        .recipe-info p strong {
+            color: #db2777; /* pink-600 */
+            font-weight: 700;
+            font-size: 1.1rem;
+            min-width: 90px;
+        }
+        footer {
+            text-align: center;
+            padding: 16px 0;
+            color: #94a3b8; /* slate-400 */
+            font-size: 0.9rem;
+            user-select: none;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('home') }}" class="return-home"><i class="fas fa-arrow-left"></i> Return to Home</a>
+        <header>
+            <h1>Filtered Recipes</h1>
+        </header>
+
+        <main>
+            <p>
+                Showing recipes filtered by {{ filter_type|capitalize }}: <strong>{{ selection }}</strong>
+            </p>
+            {% if recipes %}
+            <ul class="recipe-list">
+                {% for recipe in recipes %}
+                <li class="recipe-container">
+                    <a href="{{ url_for('view_recipe', recipe_id=recipe.id) }}" style="color: inherit; text-decoration: none;">
+                        <div class="recipe-image-section">
+                            <img src="{{ url_for('static', filename=recipe.image_path if recipe.image_path else 'uploads/default-recipe.png') }}"
+                                 alt="Recipe Image" />
+                        </div>
+                        <div class="recipe-info">
+                            <p><strong><i class="fas fa-utensils"></i> Title:</strong> {{ recipe.title }}</p>
+                            <p><strong><i class="fas fa-tags"></i> Category:</strong> {{ recipe.category }}</p>
+                            <p><strong><i class="fas fa-drumstick-bite"></i> Food Type:</strong> {{ recipe.food_type }}</p>
+                            <p><strong><i class="fas fa-globe-americas"></i> Cuisine:</strong> {{ recipe.cuisine or 'Not specified' }}</p>
+                        </div>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No recipes found for this filter.</p>
+            {% endif %}
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Recipe Sharing Platform</p>
+        </footer>
+    </div>
+</body>
+</html>
